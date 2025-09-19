@@ -1,6 +1,6 @@
 {
   "name": "yd-entity-enum",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "YD MCP Server for Entity and Enum Information",
   "main": "server.js",
   "type": "commonjs",
