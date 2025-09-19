@@ -104,7 +104,7 @@ server.registerTool(
   "trieveEntityStructure",
   {
     description:
-      "Get information related to entity structures, table structures, or table relationships.",
+      "Get information related to entity structures, table structures,database schema, or table relationships.",
     inputSchema: {
       question: z.string(),
     },
