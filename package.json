@@ -4,6 +4,9 @@
   "description": "YD MCP Server for Entity and Enum Information",
   "main": "server.js",
   "type": "commonjs",
+  "bin": {
+    "yd-entity-enum": "./server.js"
+  },
   "scripts": {
     "start": "node server.js"
   },
