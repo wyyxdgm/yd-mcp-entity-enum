@@ -104,7 +104,7 @@ server.registerTool(
   "trieveEntityStructure",
   {
     description:
-      "Get the entity structure information related to the input (including detailed attribute descriptions, such as: <User,User>={name: name, age: age, ...})",
+      "Get information related to entity structures, table structures, or table relationships.",
     inputSchema: {
       question: z.string(),
     },
