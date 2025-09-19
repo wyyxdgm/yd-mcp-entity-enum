@@ -11,112 +11,108 @@ const server = new McpServer({
   version: "1.0.0",
 });
 
-// 正确的工具定义 - 无参数的工具
-server.tool(
-  "get_entities_simple",
-  "获取所有实体列简要信息(表名称和英文名)",
-  {
-    // 即使没有参数，也要提供一个空的 schema 对象
-    type: "object",
-    properties: {},
-  },
-  async () => {
-    try {
-      console.error("调用 get_entities_simple");
-      const response = await makeRequest("/entities/simple", "GET");
-      return {
-        content: [{ type: "text", text: response.text || JSON.stringify(response) }],
-      };
-    } catch (error) {
-      return handleError(error);
-    }
-  }
-);
+// // 正确的工具定义 - 无参数的工具
+// server.registerTool(
+//   "get_entities_simple",
+//   "获取所有实体列简要信息(表名称和英文名)",
+//   {
+//     // 即使没有参数，也要提供一个空的 schema 对象
+//     type: "object",
+//     properties: {},
+//   },
+//   async () => {
+//     try {
+//       console.error("调用 get_entities_simple");
+//       const response = await makeRequest("/entities/simple", "GET");
+//       return {
+//         content: [{ type: "text", text: response.text || JSON.stringify(response) }],
+//       };
+//     } catch (error) {
+//       return handleError(error);
+//     }
+//   }
+// );
 
-server.tool(
-  "get_enums_simple",
-  "获取所有枚举列简要信息(名称和英文名)",
-  {
-    type: "object",
-    properties: {},
-  },
-  async () => {
-    try {
-      console.error("调用 get_enums_simple");
-      const response = await makeRequest("/enums/simple", "GET");
-      return {
-        content: [{ type: "text", text: response.text || JSON.stringify(response) }],
-      };
-    } catch (error) {
-      return handleError(error);
-    }
-  }
-);
+// server.registerTool(
+//   "get_enums_simple",
+//   "获取所有枚举列简要信息(名称和英文名)",
+//   {
+//     type: "object",
+//     properties: {},
+//   },
+//   async () => {
+//     try {
+//       console.error("调用 get_enums_simple");
+//       const response = await makeRequest("/enums/simple", "GET");
+//       return {
+//         content: [{ type: "text", text: response.text || JSON.stringify(response) }],
+//       };
+//     } catch (error) {
+//       return handleError(error);
+//     }
+//   }
+// );
 
-server.tool(
-  "get_all_simple",
-  "获取所有实体列简要信息 + 所有枚举列简要信息",
-  {
-    type: "object",
-    properties: {},
-  },
-  async () => {
-    try {
-      console.error("调用 get_all_simple");
-      const response = await makeRequest("/all/simple", "GET");
-      return {
-        content: [{ type: "text", text: response.text || JSON.stringify(response) }],
-      };
-    } catch (error) {
-      return handleError(error);
-    }
-  }
-);
+// server.registerTool(
+//   "get_all_simple",
+//   "获取所有实体列简要信息 + 所有枚举列简要信息",
+//   {
+//     type: "object",
+//     properties: {},
+//   },
+//   async () => {
+//     try {
+//       console.error("调用 get_all_simple");
+//       const response = await makeRequest("/all/simple", "GET");
+//       return {
+//         content: [{ type: "text", text: response.text || JSON.stringify(response) }],
+//       };
+//     } catch (error) {
+//       return handleError(error);
+//     }
+//   }
+// );
 
-// 有参数的工具 - 正确的定义方式
-server.tool(
-  "get_ai_simple",
-  "获取经过AI推荐的 和输入相关的 实体和枚举类型名称(仅返回中英文名称，如:<用户,User>)",
+// // 有参数的工具 - 正确的定义方式
+// server.registerTool(
+//   "get_simple",
+//   "获取经过AI推荐的 和输入相关的 实体和枚举类型名称(仅返回中英文名称，如:<用户,User>)",
+//   {
+//     type: "object",
+//     properties: {
+//       input: {
+//         type: "string",
+//         description: "用户输入的问题",
+//       },
+//     },
+//     required: ["input"],
+//   },
+//   async (params) => {
+//     try {
+//       console.error("调用 get_simple，输入:", params.input);
+//       const response = await makeRequest("/ai/simple", "POST", { question: params.input || "没有输入" });
+//       return {
+//         content: [{ type: "text", text: response.text || JSON.stringify(response) }],
+//       };
+//     } catch (error) {
+//       return handleError(error);
+//     }
+//   }
+// );
+
+server.registerTool(
+  "trieveEntityStructure",
   {
-    type: "object",
-    properties: {
-      input: {
-        type: "string",
-        description: "输入内容",
-      },
+    description:
+      "Get the entity structure information related to the input (including detailed attribute descriptions, such as: <User,User>={name: name, age: age, ...})",
+    inputSchema: {
+      question: z.string(),
     },
-    required: ["input"],
   },
-  async (params) => {
+  async ({ question }) => {
     try {
-      console.error("调用 get_ai_simple，输入:", params.input);
-      const response = await makeRequest("/ai/simple", "POST", { question: params.input });
-      return {
-        content: [{ type: "text", text: response.text || JSON.stringify(response) }],
-      };
-    } catch (error) {
-      return handleError(error);
-    }
-  }
-);
-
-server.tool(
-  "get_ai_detail",
-  "获取经过AI推荐的 和输入相关的 所有实体和枚举详细结构(包含详细属性说明，如：<用户,User>:{name:姓名、age:年龄})",
-  {
-    type: "object",
-    properties: {
-      input: {
-        type: "string",
-        description: "输入内容",
-      },
-    },
-    required: ["input"],
-  },
-  async (params) => {
-    try {
-      console.error("调用 get_ai_detail，输入:", params.input);
-      const response = await makeRequest("/ai/detail", "POST", { question: params.input });
+      console.error("调用 trieve_entity_structure，输入:", { question });
+      const response = await makeRequest("/ai/detail", "POST", { question });
       return {
         content: [{ type: "text", text: response.text || JSON.stringify(response) }],
       };
