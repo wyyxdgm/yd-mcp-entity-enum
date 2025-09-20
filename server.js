@@ -106,7 +106,7 @@ server.registerTool(
     description:
       "Get information related to entity structures, table structures,database schema, or table relationships.",
     inputSchema: {
-      question: z.string({ description: "对话输入" }),
+      question: z.string({ description: "用于获取相关数据结构的关键性描述" }),
       needEntity: z.boolean({ description: "是否需要实体数据" }),
       needEnum: z.boolean({ description: "是否需要枚举数据" }),
       level: z.string({
