@@ -106,13 +106,19 @@ server.registerTool(
     description:
       "Get information related to entity structures, table structures,database schema, or table relationships.",
     inputSchema: {
-      question: z.string(),
+      question: z.string({ description: "对话输入" }),
+      needEntity: z.boolean({ description: "是否需要实体数据" }),
+      needEnum: z.boolean({ description: "是否需要枚举数据" }),
+      level: z.string({
+        description:
+          "信息详细程度,枚举类型:detail/relation/simple。其中detail:包含所有信息;relation:包含引用和枚举信息;simple:仅包含中英文名称",
+      }),
     },
   },
-  async ({ question }) => {
+  async ({ question, needEntity, needEnum, level }) => {
     try {
-      console.error("调用 trieve_entity_structure，输入:", { question });
-      const response = await makeRequest("/ai/detail", "POST", { question });
+      console.error("调用 trieve_entity_structure，输入:", { question, needEntity, needEnum });
+      const response = await makeRequest(`/ai/${level}`, "POST", { question, needEntity, needEnum });
       return {
         content: [{ type: "text", text: response.text || JSON.stringify(response) }],
       };
