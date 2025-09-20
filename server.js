@@ -104,7 +104,7 @@ server.registerTool(
   "trieveEntityStructure",
   {
     description:
-      "Get information related to entity structures, table structures,database schema, or table relationships.",
+      "为代码提供必要的数据结构。用于获取当前系统的总体数据结构设计，获取具体表结构、数据字段详情以及数据库关系等信息",
     inputSchema: {
       question: z.string({ description: "用于获取相关数据结构的关键性描述" }),
       needEntity: z.boolean({ description: "是否需要实体数据" }),
